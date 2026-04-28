@@ -138,14 +138,18 @@ python main.py --config config_pattern6.yaml --save-frames
 
 ## 🙏 謝辞
 
-本研究の基盤として、オープンソースの **2d-multi-places-simulation-on-fire**
-プロジェクトを使用し、以下を拡張した：
+本研究の基盤シミュレーション枠組みは、**本ハッカソンの参加者向けに
+兵頭龍樹氏から提供された LLM マルチエージェント 2D シミュレーション
+プロジェクト**（`2d-multi-places-simulation-on-fire`）を出発点とし、
+本研究では以下を拡張した：
 - ペルソナシステム（個別キャラ付け）
 - 矩形コート（実寸比 2.33:1）対応
 - アナウンス（PA システム）機能
-- world_description によるシナリオ上書き
+- `world_description` によるシナリオ上書き
 - キャパシティ強制
 - バドミントンコートマーキング描画
+
+兵頭氏が共有してくださった基盤プロジェクトに深く感謝いたします。
 
 LLM 実行環境として、[Ollama](https://ollama.ai/) と
 [Google Gemma 4](https://deepmind.google/models/gemma/gemma-4/) (e4b) を使用。
