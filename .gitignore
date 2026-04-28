@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+.venv/
+.env
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Simulation outputs (large frames + jsonl)
+# These would bloat the repo; samples/ has lightweight versions
+simulation/output/
+simulation/output_*/
+simulation/*.log
+simulation/*.zip
+
+# Backup configs not needed in repo
+simulation/config_smoketest.yaml
+simulation/config_preview.yaml
