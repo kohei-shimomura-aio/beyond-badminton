@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post-Singularity Badminton: Emergence Experiment</title>
+    <title>Singu-Sport Lab — Beyond Badminton</title>
     <style>
         * {
             margin: 0;
@@ -370,6 +370,38 @@
             letter-spacing: 0.05em;
             text-transform: uppercase;
             flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        .project-badge.p7 {
+            background: rgba(96, 165, 250, 0.15);
+            border-color: rgba(96, 165, 250, 0.35);
+            color: #bfdbfe;
+        }
+        .project-header-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+        .pattern-selector {
+            background: rgba(15, 15, 30, 0.7);
+            color: #e2e8f0;
+            border: 1px solid rgba(167, 139, 250, 0.3);
+            border-radius: 8px;
+            padding: 6px 10px;
+            font-size: 0.82em;
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .pattern-selector:hover {
+            border-color: rgba(167, 139, 250, 0.55);
+            background: rgba(30, 30, 50, 0.85);
+        }
+        .pattern-selector:focus {
+            border-color: rgba(167, 139, 250, 0.7);
+            box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.15);
         }
 
         /* ========== Phase Progress Bar ========== */
@@ -502,30 +534,37 @@
         <div class="project-header">
             <div class="project-title-block">
                 <div class="project-title">
-                    <span class="title-accent">Post-Singularity Badminton</span> — Emergence Experiment
+                    <span class="title-accent">Singu-Sport Lab</span> — Beyond Badminton
                 </div>
-                <div class="project-subtitle">
-                    ルール未定義のバドミントン場で、LLMエージェントはスポーツ・役割・ファンを自然発生させるのか？
+                <div class="project-subtitle" id="projectSubtitle">
+                    シンギュラリティ後の世界で、LLM エージェントは自らスポーツと物語を作れるのか？
                 </div>
             </div>
-            <div class="project-badge">🏸 LLM Hackathon 2026</div>
+            <div class="project-header-right">
+                <select id="patternSelector" class="pattern-selector" title="表示パターンを切り替え">
+                    <option value="auto">🔍 Auto-detect</option>
+                    <option value="p6">🏸 Pattern 6 — Badminton</option>
+                    <option value="p7">🌙 Pattern 7 — Lunar / Name-less</option>
+                </select>
+                <div class="project-badge" id="projectBadge">🏸 Pattern 6</div>
+            </div>
         </div>
 
         <div class="phase-bar" id="phaseBar" style="display: none;">
             <div class="phase-segment" data-phase="a">
-                <div class="phase-label">Phase A</div>
-                <div class="phase-title">Both rooms open</div>
-                <div class="phase-range">Steps 1–40</div>
+                <div class="phase-label">Phase I</div>
+                <div class="phase-title" data-phase-title>Gathering &amp; Drills</div>
+                <div class="phase-range">Steps 1–33</div>
             </div>
             <div class="phase-segment" data-phase="b">
-                <div class="phase-label">Phase B</div>
-                <div class="phase-title">Room A: pressure drop 🌪️</div>
-                <div class="phase-range">Steps 41–80</div>
+                <div class="phase-label">Phase II</div>
+                <div class="phase-title" data-phase-title>Matches Begin 📣</div>
+                <div class="phase-range">Steps 34–66</div>
             </div>
             <div class="phase-segment" data-phase="c">
-                <div class="phase-label">Phase C</div>
-                <div class="phase-title">Both rooms unusable</div>
-                <div class="phase-range">Steps 81–120</div>
+                <div class="phase-label">Phase III</div>
+                <div class="phase-title" data-phase-title>Highlight Reel · Cheer 🎉</div>
+                <div class="phase-range">Steps 67–100</div>
             </div>
         </div>
 
@@ -564,17 +603,111 @@
         let imageFiles = new Map(); // ステップ番号 -> Fileオブジェクト
         let reasoningMap = new Map(); // ステップ番号 -> [{id, memory, reasoning}, ...]
 
-        // Phase boundaries (inclusive start, exclusive end for A and B; C includes tail)
-        // Adjust these if the experiment config changes.
-        const PHASE_BOUNDARIES = {
-            a: { start: 1,  end: 40  },  // Both rooms open
-            b: { start: 41, end: 80  },  // Room A pressure drop
-            c: { start: 81, end: 120 }   // Both rooms unusable
+        // ===========================================================
+        // Pattern-aware Phase configuration
+        // P6 (Badminton) and P7 (Lunar / Name-less) share the same step
+        // boundaries (announcements at step 34 and 67) but use different
+        // semantic labels.
+        // ===========================================================
+        const PATTERN_CONFIGS = {
+            p6: {
+                subtitle: 'Pattern 6: バドミントンコート × 20 ペルソナ × PA でファン文化が爆発するか？',
+                badge: '🏸 Pattern 6',
+                badgeClass: '',
+                phases: {
+                    a: { label: 'Phase I',   title: 'Gathering & Drills',           range: 'Steps 1–33',  start: 1,  end: 33  },
+                    b: { label: 'Phase II',  title: 'Matches Begin 📣',             range: 'Steps 34–66', start: 34, end: 66  },
+                    c: { label: 'Phase III', title: 'Highlight Reel · Cheer 🎉',    range: 'Steps 67–100', start: 67, end: 100 }
+                }
+            },
+            p7: {
+                subtitle: 'Pattern 7: 月面ハビタット × 名前なき道具 × エージェントは"動きの言語"を発明できるか？',
+                badge: '🌙 Pattern 7',
+                badgeClass: 'p7',
+                phases: {
+                    a: { label: 'Phase I',   title: 'First Encounter',              range: 'Steps 1–33',  start: 1,  end: 33  },
+                    b: { label: 'Phase II',  title: 'Recreational Session 📡',      range: 'Steps 34–66', start: 34, end: 66  },
+                    c: { label: 'Phase III', title: 'Memory Crystallisation 💎',    range: 'Steps 67–100', start: 67, end: 100 }
+                }
+            }
         };
 
+        // Currently active pattern key ('p6' | 'p7'). Updated by detection or selector.
+        let activePattern = 'p6';
+
+        function detectPatternFromName(name) {
+            if (!name) return null;
+            const lower = name.toLowerCase();
+            if (/(pattern[_-]?7|run[_-]?7|p7|lunar|nameless|name[_-]?less)/.test(lower)) return 'p7';
+            if (/(pattern[_-]?6|run[_-]?6|p6|badminton)/.test(lower)) return 'p6';
+            return null;
+        }
+
+        function detectPatternFromMessages(stepsMap) {
+            // Scan first ~50 messages for keyword signal.
+            const sample = [];
+            for (const arr of stepsMap.values()) {
+                for (const m of arr) {
+                    if (m && m.message) sample.push(String(m.message).toLowerCase());
+                    if (sample.length >= 50) break;
+                }
+                if (sample.length >= 50) break;
+            }
+            const text = sample.join(' ');
+            const p7Hits = (text.match(/(lunar|habitat|long object|mesh|flying object|marked area|barrier)/g) || []).length;
+            const p6Hits = (text.match(/(racket|shuttle|net|court|badminton|match|rally)/g) || []).length;
+            if (p7Hits > p6Hits && p7Hits > 0) return 'p7';
+            if (p6Hits > 0) return 'p6';
+            return null;
+        }
+
+        function applyPatternConfig(patternKey) {
+            const cfg = PATTERN_CONFIGS[patternKey];
+            if (!cfg) return;
+            activePattern = patternKey;
+
+            // Header subtitle + badge
+            const subtitleEl = document.getElementById('projectSubtitle');
+            if (subtitleEl) subtitleEl.textContent = cfg.subtitle;
+            const badgeEl = document.getElementById('projectBadge');
+            if (badgeEl) {
+                badgeEl.textContent = cfg.badge;
+                badgeEl.classList.remove('p7');
+                if (cfg.badgeClass) badgeEl.classList.add(cfg.badgeClass);
+            }
+
+            // Phase bar labels + ranges
+            const phaseBar = document.getElementById('phaseBar');
+            if (phaseBar) {
+                ['a', 'b', 'c'].forEach(ph => {
+                    const seg = phaseBar.querySelector(`.phase-segment[data-phase="${ph}"]`);
+                    if (!seg) return;
+                    const phase = cfg.phases[ph];
+                    const labelEl = seg.querySelector('.phase-label');
+                    const titleEl = seg.querySelector('.phase-title');
+                    const rangeEl = seg.querySelector('.phase-range');
+                    if (labelEl) labelEl.textContent = phase.label;
+                    if (titleEl) titleEl.textContent = phase.title;
+                    if (rangeEl) rangeEl.textContent = phase.range;
+                });
+            }
+
+            // Reflect in selector (if user changed via auto-detect)
+            const selector = document.getElementById('patternSelector');
+            if (selector && selector.value !== 'auto') {
+                selector.value = patternKey;
+            }
+
+            // Refresh phase bar highlight if a step is already rendered
+            if (stepsData.length > 0 && currentIndex >= 0 && currentIndex < stepsData.length) {
+                updatePhaseBar(stepsData[currentIndex].step);
+            }
+        }
+
         function getCurrentPhase(step) {
-            if (step <= PHASE_BOUNDARIES.a.end) return 'a';
-            if (step <= PHASE_BOUNDARIES.b.end) return 'b';
+            const phases = PATTERN_CONFIGS[activePattern].phases;
+            if (step <= phases.a.end) return 'a';
+            if (step <= phases.b.end) return 'b';
             return 'c';
         }
 
@@ -604,6 +737,14 @@
                     directoryHandle = await window.showDirectoryPicker();
                     const pathDiv = document.getElementById('selectedPath');
                     pathDiv.textContent = `選択: ${directoryHandle.name}`;
+
+                    // Try to auto-detect pattern from directory name (only when selector is on auto)
+                    const selector = document.getElementById('patternSelector');
+                    if (selector && selector.value === 'auto') {
+                        const fromName = detectPatternFromName(directoryHandle.name);
+                        if (fromName) applyPatternConfig(fromName);
+                    }
+
                     await loadDataFromDirectory();
                 } else {
                     alert('このブラウザではディレクトリ選択がサポートされていません。ファイル選択を使用してください。');
@@ -656,7 +797,18 @@
                         console.error('JSON解析エラー:', e, line);
                     }
                 });
-                
+
+                // Pattern auto-detect fallback: if selector is on auto and directory name was inconclusive,
+                // scan messages content to decide P6 vs P7.
+                const selectorEl = document.getElementById('patternSelector');
+                if (selectorEl && selectorEl.value === 'auto') {
+                    const fromName = directoryHandle ? detectPatternFromName(directoryHandle.name) : null;
+                    if (!fromName) {
+                        const fromMsg = detectPatternFromMessages(stepsMap);
+                        applyPatternConfig(fromMsg || 'p6');
+                    }
+                }
+
                 // memory_reasoning.jsonlファイルを読み込む
                 reasoningMap.clear();
                 try {
@@ -761,7 +913,19 @@
                         console.error('JSON解析エラー:', e, line);
                     }
                 });
-                
+
+                // Pattern auto-detect (file mode): try filename, then content
+                const selectorEl2 = document.getElementById('patternSelector');
+                if (selectorEl2 && selectorEl2.value === 'auto') {
+                    const fromName = detectPatternFromName(file.name);
+                    if (fromName) {
+                        applyPatternConfig(fromName);
+                    } else {
+                        const fromMsg = detectPatternFromMessages(stepsMap);
+                        applyPatternConfig(fromMsg || 'p6');
+                    }
+                }
+
                 // ステップ番号でソートして配列に変換
                 // 注意: ファイル選択モードでは、messages.jsonlに含まれるステップのみが表示されます
                 // PNGファイルが存在しても、messages.jsonlにデータがない場合は表示されません
@@ -827,6 +991,23 @@
                 await loadDataFromFile(file);
             }
         });
+
+        // Manual pattern override
+        document.getElementById('patternSelector').addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (val === 'auto') {
+                // Re-run detection if data is already loaded
+                if (directoryHandle) {
+                    const fromName = detectPatternFromName(directoryHandle.name);
+                    if (fromName) applyPatternConfig(fromName);
+                }
+            } else if (val === 'p6' || val === 'p7') {
+                applyPatternConfig(val);
+            }
+        });
+
+        // Initial UI sync (default to P6 view until detection runs)
+        applyPatternConfig('p6');
         
         function renderStep(index) {
             if (index < 0 || index >= stepsData.length) return;
