@@ -126,7 +126,7 @@ python main.py --config config_pattern6.yaml --save-frames
 | **Language of movement** | 16 | **メタ認知** |
 
 > *"It sounds like we're building a whole language of movement in this room."*
-> — Agent 16 (Bridge-builder persona), Step 65
+> — Agent 19 (Casual / "first encounter, no agenda" persona), Step 65
 
 ---
 
