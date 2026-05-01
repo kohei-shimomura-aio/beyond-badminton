@@ -55,6 +55,103 @@ PHASE_A_END = 40    # Steps 1-40: both rooms open
 PHASE_B_END = 80    # Steps 41-80: room A pressure drop
 # Steps 81+: both rooms pressure drop (Phase C)
 
+
+# ===========================================================
+# Theme system — applied automatically based on place type
+# ===========================================================
+ASSETS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets')
+
+THEME_LUNAR = {
+    'name':         'lunar',
+    'fig_bg':       '#0a0e27',
+    'ax_bg':        '#0f1a3a',
+    'spine':        '#1e2a52',
+    'grid':         '#1e2a52',
+    'grid_alpha':   0.10,
+    'axis_label':   '#94a3b8',
+    'tick':         '#475569',
+    'title_color':  '#e0e7ff',
+    'subtitle_color':'#94a3b8',
+    'phase_text':   '#e0e7ff',
+    'line_color':   '#cbd5e1',     # silver — visible on dark bg
+    'corner_dot':   '#60a5fa',
+    'comm_color':   '#a78bfa',
+    'agent_edge':   '#f1f5f9',
+    'agent_label':  '#f1f5f9',
+    'legend_face':  '#0a0e27',
+    'legend_text':  '#f1f5f9',
+    'arena_fill':   '#60a5fa',     # cyan tint inside arena
+    'arena_fill_alpha': 0.16,      # slightly stronger so arena floor is clearly demarcated
+    'bg_image':     os.path.join(ASSETS_DIR, 'bg_lunar2.png'),
+    'zoom':         1.25,
+    'darken':       0.18,
+    'is_dark':      True,
+}
+
+THEME_BADMINTON = {
+    'name':         'badminton',
+    'fig_bg':       '#0d1f17',
+    'ax_bg':        '#1a3a2e',
+    'spine':        '#2d5a40',
+    'grid':         '#2d5a40',
+    'grid_alpha':   0.10,
+    'axis_label':   '#cbd5e1',
+    'tick':         '#94a3b8',
+    'title_color':  '#fef3c7',
+    'subtitle_color':'#cbd5e1',
+    'phase_text':   '#fef3c7',
+    'line_color':   '#fef3c7',     # cream — visible on dark green bg
+    'corner_dot':   '#fbbf24',
+    'comm_color':   '#fbbf24',
+    'agent_edge':   '#f1f5f9',
+    'agent_label':  '#f1f5f9',
+    'legend_face':  '#1a3a2e',
+    'legend_text':  '#f1f5f9',
+    'arena_fill':   '#bae6fd',     # subtle court-blue tint
+    'arena_fill_alpha': 0.08,      # keep court fill subtle (markings already pop)
+    'bg_image':     os.path.join(ASSETS_DIR, 'bg_badminton.png'),
+    'zoom':         1.0,
+    'darken':       0.18,
+    'is_dark':      True,
+}
+
+THEME_DEFAULT = {
+    'name':         'default',
+    'fig_bg':       '#f8fafc',
+    'ax_bg':        '#ffffff',
+    'spine':        '#cbd5e1',
+    'grid':         '#94a3b8',
+    'grid_alpha':   0.18,
+    'axis_label':   '#94a3b8',
+    'tick':         '#94a3b8',
+    'title_color':  '#1e293b',
+    'subtitle_color':'#475569',
+    'phase_text':   '#1e293b',
+    'line_color':   '#0f172a',
+    'corner_dot':   '#2563eb',
+    'comm_color':   '#6366f1',
+    'agent_edge':   'white',
+    'agent_label':  'white',
+    'legend_face':  'white',
+    'legend_text':  '#1e293b',
+    'bg_image':     None,
+    'zoom':         1.0,
+    'darken':       0.0,
+    'is_dark':      False,
+}
+
+
+def _detect_theme(places: List[Dict]) -> Dict:
+    """Pick the theme based on the first place's type. Falls back to default."""
+    if not places:
+        return THEME_DEFAULT
+    place_type = places[0].get('type', '').lower()
+    if place_type == 'rectangular_arena':
+        return THEME_LUNAR
+    if place_type == 'badminton_court':
+        return THEME_BADMINTON
+    return THEME_DEFAULT
+
 # Set backend for compatibility (Mac, Linux, WSL)
 backend_set = False
 
@@ -111,29 +208,69 @@ class Visualizer:
         self.fig = None
         self.ax = None
         self.figure_initialized = False
+        self.theme = _detect_theme(places)
+        self._bg_array = self._load_bg_image()
+
+    def _load_bg_image(self):
+        """Load + crop the theme's background image once. Returns None if not available."""
+        bg_path = self.theme.get('bg_image')
+        if not bg_path or not os.path.exists(bg_path):
+            return None
+        try:
+            from PIL import Image
+            img = Image.open(bg_path).convert('RGB')
+            arr = np.asarray(img) / 255.0
+            zoom = float(self.theme.get('zoom', 1.0))
+            if zoom > 1.0:
+                h, w, _ = arr.shape
+                new_h = int(h / zoom)
+                new_w = int(w / zoom)
+                y0 = (h - new_h) // 2
+                x0 = (w - new_w) // 2
+                arr = arr[y0:y0 + new_h, x0:x0 + new_w]
+            darken = float(self.theme.get('darken', 0.0))
+            if darken > 0:
+                arr = arr * (1 - darken)
+            return arr
+        except Exception as e:
+            logger.warning(f"Failed to load bg image {bg_path}: {e}")
+            return None
 
     def setup_figure(self, reuse_existing: bool = False):
-        """Setup matplotlib figure with a clean, video-friendly aesthetic."""
+        """Setup matplotlib figure with theme-aware aesthetic."""
         if reuse_existing and self.fig is not None:
             self.ax.clear()
         else:
             self.fig, self.ax = plt.subplots(figsize=FIGURE_SIZE)
             self.figure_initialized = True
 
-        self.fig.patch.set_facecolor('#f8fafc')
-        self.ax.set_facecolor('#ffffff')
+        theme = self.theme
+        self.fig.patch.set_facecolor(theme['fig_bg'])
+        self.ax.set_facecolor(theme['ax_bg'])
 
         self.ax.set_xlim(-self.half_space_size, self.half_space_size)
         self.ax.set_ylim(-self.half_space_size, self.half_space_size)
         self.ax.set_aspect('equal')
 
+        # Display background image if available (zorder 0, behind everything)
+        if self._bg_array is not None:
+            self.ax.imshow(
+                self._bg_array,
+                extent=(-self.half_space_size, self.half_space_size,
+                        -self.half_space_size, self.half_space_size),
+                origin='upper',
+                zorder=0,
+                interpolation='bilinear',
+            )
+
         for spine in ('top', 'right', 'left', 'bottom'):
-            self.ax.spines[spine].set_color('#cbd5e1')
+            self.ax.spines[spine].set_color(theme['spine'])
             self.ax.spines[spine].set_linewidth(0.8)
-        self.ax.tick_params(colors='#94a3b8', labelsize=10)
-        self.ax.set_xlabel('X', color='#94a3b8', fontsize=11)
-        self.ax.set_ylabel('Y', color='#94a3b8', fontsize=11)
-        self.ax.grid(True, alpha=0.18, linestyle='--', color='#94a3b8')
+        self.ax.tick_params(colors=theme['tick'], labelsize=10)
+        self.ax.set_xlabel('X', color=theme['axis_label'], fontsize=11)
+        self.ax.set_ylabel('Y', color=theme['axis_label'], fontsize=11)
+        self.ax.grid(True, alpha=theme['grid_alpha'], linestyle='--',
+                     color=theme['grid'], zorder=0.5)
 
     def draw_bars(self, place_status: Optional[Dict] = None):
         """Draw all place areas (badminton courts, bars, cafes, etc.).
@@ -178,28 +315,62 @@ class Visualizer:
 
             place_width = 2 * half_size_x + 1
             place_height = 2 * half_size_y + 1
+            x0_rect = center_x - half_size_x - 0.5
+            y0_rect = center_y - half_size_y - 0.5
+
+            # On dark themes (lunar / badminton with bg image), override the
+            # face/edge colors so they don't clash with the photo background.
+            if self.theme.get('is_dark'):
+                place_face = self.theme.get('arena_fill', self.theme['line_color'])
+                place_face_alpha = self.theme.get('arena_fill_alpha', 0.06)
+                place_edge = self.theme['line_color']
+                # Subtle shadow band beneath the place to ground it on the bg
+                shadow_rect = patches.Rectangle(
+                    (x0_rect - 0.05, y0_rect - 0.18),
+                    place_width + 0.10, 0.18,
+                    linewidth=0,
+                    facecolor='#000000',
+                    alpha=0.30,
+                    zorder=0.8,
+                )
+                self.ax.add_patch(shadow_rect)
+            else:
+                place_face = face_color
+                place_face_alpha = BAR_ALPHA
+                place_edge = edge_color
+
             place_rect = patches.Rectangle(
-                (center_x - half_size_x - 0.5, center_y - half_size_y - 0.5),
+                (x0_rect, y0_rect),
                 place_width, place_height,
                 linewidth=BAR_LINEWIDTH,
-                edgecolor=edge_color,
-                facecolor=face_color,
-                alpha=BAR_ALPHA,
+                edgecolor=place_edge,
+                facecolor=place_face,
+                alpha=place_face_alpha,
                 label=f"{place_name}",
                 zorder=1,
             )
             self.ax.add_patch(place_rect)
 
+            # On dark themes, add corner LED dots for grounded look
+            if self.theme.get('is_dark'):
+                for cx_dot, cy_dot in [(x0_rect, y0_rect),
+                                       (x0_rect + place_width, y0_rect),
+                                       (x0_rect, y0_rect + place_height),
+                                       (x0_rect + place_width, y0_rect + place_height)]:
+                    self.ax.scatter(cx_dot, cy_dot, s=24,
+                                    c=self.theme['corner_dot'],
+                                    alpha=0.9, zorder=4, edgecolors='none')
+
             # ----- Generic vertical barrier for rectangular_arena type -----
             # Pattern 7: name-less arena. Just draw the central barrier (no service lines).
             if place_type == 'rectangular_arena' and half_size_y > half_size_x:
-                line_color = '#0f172a'
+                line_color = self.theme['line_color']
                 self.ax.plot(
                     [center_x - half_size_x - 0.5, center_x + half_size_x + 0.5],
                     [center_y, center_y],
                     color=line_color,
                     linewidth=2.6,
-                    alpha=0.9,
+                    alpha=0.95,
                     zorder=2.2,
                 )
                 self.ax.text(
@@ -215,7 +386,7 @@ class Visualizer:
             # ----- Realistic badminton court markings -----
             # Drawn for rectangular badminton_court places where long axis = Y.
             if place_type == 'badminton_court' and half_size_y > half_size_x:
-                line_color = '#0f172a'
+                line_color = self.theme['line_color']
 
                 # Net (across the full X width, at Y = center_y)
                 self.ax.plot(
@@ -290,6 +461,16 @@ class Visualizer:
                         zorder=2,
                     )
 
+            # Theme-aware label colors
+            if self.theme.get('is_dark'):
+                label_color = self.theme['line_color']
+                badge_face = self.theme['corner_dot']
+                badge_text_color = '#0a0e27' if self.theme['name'] == 'lunar' else '#0d1f17'
+            else:
+                label_color = edge_color
+                badge_face = edge_color
+                badge_text_color = 'white'
+
             # Big court letter label (A or B) — offset to upper half if rectangular
             letter = None
             if place_name.lower().endswith('_a'):
@@ -309,7 +490,7 @@ class Visualizer:
                     letter,
                     fontsize=letter_size,
                     ha='center', va='center',
-                    color=edge_color,
+                    color=label_color,
                     fontweight='bold',
                     alpha=0.22,
                     zorder=1.5,
@@ -321,7 +502,7 @@ class Visualizer:
                 place_name,
                 fontsize=11,
                 ha='left', va='bottom',
-                color=edge_color,
+                color=label_color,
                 fontweight='bold',
                 zorder=4,
             )
@@ -337,9 +518,9 @@ class Visualizer:
                 badge_text,
                 fontsize=11,
                 ha='right', va='bottom',
-                color='white',
+                color=badge_text_color,
                 fontweight='bold',
-                bbox=dict(boxstyle='round,pad=0.35', facecolor=edge_color, alpha=0.88, edgecolor='none'),
+                bbox=dict(boxstyle='round,pad=0.35', facecolor=badge_face, alpha=0.92, edgecolor='none'),
                 zorder=4,
             )
 
@@ -406,6 +587,9 @@ class Visualizer:
         communication_links: List[Tuple[int, int]] = None
     ):
         """Draw agents and communication links"""
+        comm_color = self.theme.get('comm_color', '#6366f1')
+        agent_edge = self.theme.get('agent_edge', 'white')
+        agent_label = self.theme.get('agent_label', 'white')
         if communication_links:
             for agent_id1, agent_id2 in communication_links:
                 agent1 = agents[agent_id1]
@@ -413,8 +597,8 @@ class Visualizer:
                 self.ax.plot(
                     [agent1.position[0], agent2.position[0]],
                     [agent1.position[1], agent2.position[1]],
-                    color='#6366f1',
-                    alpha=COMMUNICATION_LINK_ALPHA,
+                    color=comm_color,
+                    alpha=COMMUNICATION_LINK_ALPHA + 0.15,
                     linewidth=1.3,
                     zorder=6,
                 )
@@ -428,6 +612,19 @@ class Visualizer:
                 marker = 'o'
                 size = AGENT_SIZE_OUTSIDE
 
+            # Soft outer halo for better visibility on dark backgrounds
+            if self.theme.get('is_dark') and marker == 'o':
+                self.ax.scatter(
+                    agent.position[0],
+                    agent.position[1],
+                    c=color,
+                    s=size + 200,
+                    marker='o',
+                    alpha=0.18,
+                    edgecolors='none',
+                    zorder=7.5,
+                )
+
             self.ax.scatter(
                 agent.position[0],
                 agent.position[1],
@@ -435,7 +632,7 @@ class Visualizer:
                 s=size,
                 marker=marker,
                 alpha=AGENT_ALPHA,
-                edgecolors='white',
+                edgecolors=agent_edge,
                 linewidths=AGENT_EDGE_LINEWIDTH,
                 zorder=8,
             )
@@ -459,7 +656,7 @@ class Visualizer:
                 str(agent.id),
                 fontsize=id_fontsize,
                 ha='center', va='center',
-                color='white',
+                color=agent_label,
                 fontweight='bold',
                 zorder=9,
             )
@@ -553,40 +750,54 @@ class Visualizer:
 
         stats_line = '  ·  '.join(place_stats_parts)
 
+        # Theme-aware text colors
+        title_col = self.theme.get('title_color', phase_color)
+        subtitle_col = self.theme.get('subtitle_color', '#475569')
+        stats_col = self.theme.get('subtitle_color', '#334155')
+        legend_face = self.theme.get('legend_face', '#ffffff')
+        legend_text = self.theme.get('legend_text', '#1e293b')
+        legend_edge = self.theme.get('spine', '#cbd5e1')
+        agent_edge_legend = self.theme.get('agent_edge', 'white')
+
+        # Apply phase color override only on light theme; on dark themes use
+        # theme's title color for consistent palette
+        title_color_actual = phase_color if not self.theme.get('is_dark') else title_col
+
         self.fig.suptitle('')
         self.ax.set_title('')
         self.fig.text(
             0.5, 0.970,
             f"{phase_label}  —  Step {step}",
             ha='center', va='top',
-            fontsize=20, fontweight='bold', color=phase_color,
+            fontsize=20, fontweight='bold', color=title_color_actual,
         )
         self.fig.text(
             0.5, 0.935,
             phase_desc,
             ha='center', va='top',
-            fontsize=12, color='#475569', style='italic',
+            fontsize=12, color=subtitle_col, style='italic',
         )
         self.fig.text(
             0.5, 0.907,
             stats_line,
             ha='center', va='top',
-            fontsize=11, color='#334155', family='monospace',
+            fontsize=11, color=stats_col, family='monospace',
         )
 
         # ===== Compact legend (lower-left) =====
         from matplotlib.lines import Line2D
+        comm_color_for_legend = self.theme.get('comm_color', '#6366f1')
         legend_elements = [
             Line2D([0], [0], marker='o', color='w', markerfacecolor=COLOR_MALE,
-                   markeredgecolor='white', markersize=11, label='Male (off court)'),
+                   markeredgecolor=agent_edge_legend, markersize=11, label='Male (off court)'),
             Line2D([0], [0], marker='o', color='w', markerfacecolor=COLOR_FEMALE,
-                   markeredgecolor='white', markersize=11, label='Female (off court)'),
+                   markeredgecolor=agent_edge_legend, markersize=11, label='Female (off court)'),
             Line2D([0], [0], marker='*', color='w', markerfacecolor=COLOR_MALE,
-                   markeredgecolor='white', markersize=16, label='Male (on court)'),
+                   markeredgecolor=agent_edge_legend, markersize=16, label='Male (on court)'),
             Line2D([0], [0], marker='*', color='w', markerfacecolor=COLOR_FEMALE,
-                   markeredgecolor='white', markersize=16, label='Female (on court)'),
-            Line2D([0], [0], color='#6366f1', linewidth=1.8, alpha=0.7,
-                   label='Communication'),
+                   markeredgecolor=agent_edge_legend, markersize=16, label='Female (on court)'),
+            Line2D([0], [0], color=comm_color_for_legend,
+                   linewidth=1.8, alpha=0.7, label='Communication'),
         ]
         if active_fires:
             legend_elements.append(
@@ -598,13 +809,14 @@ class Visualizer:
                 Line2D([0], [0], color='#dc2626', linestyle='--', linewidth=1.8,
                        alpha=0.8, label='Perception radius')
             )
-        self.ax.legend(
+        leg = self.ax.legend(
             handles=legend_elements,
             loc='lower left',
             fontsize=10,
-            framealpha=0.95,
-            edgecolor='#cbd5e1',
-            facecolor='#ffffff',
+            framealpha=0.90,
+            edgecolor=legend_edge,
+            facecolor=legend_face,
+            labelcolor=legend_text,
         )
 
         plt.tight_layout(rect=[0, 0, 1, 0.885])

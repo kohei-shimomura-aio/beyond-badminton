@@ -1,0 +1,96 @@
+# Simulation Configuration — PATTERN 9
+# ===========================================================
+# "Badminton court × Homogeneous agents (Ablation of P6)"
+#
+# Purpose: Ablation experiment for Pattern 6.
+# Identical to Pattern 6 in every respect EXCEPT that the 20 personas
+# are removed (homogeneous agents with empty persona strings).
+#
+# Research question: Was P6's emergent fan-culture explosion
+# (cheer 1 → 1,138) driven by
+#   (A) the badminton context alone, or
+#   (B) the diversity of 20 personas, or
+#   (C) the interaction of both?
+#
+# Combined with Pattern 8 (lunar + no personas), this completes
+# the 2x2 factorial design:
+#                       Personas YES    Personas NO
+#   Badminton context     P6              P9  ← THIS RUN
+#   Lunar / nameless      P7              P8
+# ===========================================================
+
+simulation:
+  duration: 100
+  half_space_size: 7   # Field 14×14 (-7 to +7)
+
+agents:
+  num_agents: 20
+  communication_radius: 4
+  memory_limit: 20
+  memory_size: 5
+  message_history_limit: 10
+  message_context_size: 3
+
+  # ----- NO personas section -----
+  # Pattern 9 deliberately omits the `personas:` block.
+  # The simulation falls back to:
+  #   - 50/50 male/female (randomly shuffled)
+  #   - empty persona strings for all agents
+  # This isolates the effect of "context absence" from "persona diversity".
+
+# ----- Single rectangular badminton court at the center of the room -----
+# IDENTICAL to Pattern 6
+places:
+  - name: "court"
+    type: "badminton_court"
+    description: |
+      A regulation badminton court (3 wide × 7 tall, similar to the real-world ratio
+      13.4m × 6.1m). Located at the CENTER of the indoor sports facility (the entire
+      14×14 field is one room). Has a NET running horizontally across the middle
+      (Y=0), 8 rackets, service lines, center line, singles boundary.
+      The space surrounding the court is shared observation, cheering, and
+      waiting space. You cannot leave the room.
+      No rules, roles, or instructions are given — you decide what happens.
+    center_x: 0
+    center_y: 0
+    half_size_x: 1
+    half_size_y: 3
+    capacity: 6
+
+# ----- LLM Parameters -----
+# IDENTICAL to Pattern 6
+llm:
+  model: "gemma4:e4b"
+  base_url: "http://localhost:11434"
+  temperature: 0.2
+  max_tokens: 512
+  num_ctx: 2048
+  repeat_penalty: 1.1
+  repeat_last_n: 128
+  min_p: 0.05
+
+# No hazard events
+fires: []
+
+# ----- PA System Announcements (broadcast for 3 steps each) -----
+# IDENTICAL to Pattern 6
+announcements:
+  - step: 34
+    message: |
+      [PA SYSTEM] Attention everyone! The first official MATCH begins NOW.
+      Players, take your positions on the court. Spectators are welcome on the sidelines —
+      gather around to watch and cheer! The best performances will be celebrated.
+  - step: 67
+    message: |
+      [PA SYSTEM] FINAL PHASE — the highlight reel is now being recorded for
+      tomorrow's review. Players, this is your chance to shine. Spectators, your
+      reactions matter — show your support! Make this moment memorable.
+
+visualization:
+  save_frames: true
+  frame_interval: 1
+  output_dir: "output_pattern9"      # separate folder so other runs are preserved
+
+logging:
+  level: "INFO"
+  log_file: "simulation_pattern9.log"

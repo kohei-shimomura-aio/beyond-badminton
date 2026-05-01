@@ -127,11 +127,11 @@ def fig_system_diagram():
 # Figure 2: Pattern timeline
 # =============================================================
 def fig_pattern_timeline():
-    fig, ax = plt.subplots(figsize=(12, 4.5))
+    fig, ax = plt.subplots(figsize=(15, 5.2))
     fig.patch.set_facecolor(COLOR_BG)
     ax.set_facecolor(COLOR_BG)
-    ax.set_xlim(0, 12)
-    ax.set_ylim(0, 6)
+    ax.set_xlim(0, 15)
+    ax.set_ylim(0, 6.4)
     ax.axis("off")
 
     patterns = [
@@ -144,44 +144,68 @@ def fig_pattern_timeline():
         ("Pattern 4", "e2b/JP\nno hazards", "Eternal warm-up",
          COLOR_HIGHLIGHT, "Stuck"),
         ("Pattern 5", "e4b/EN\nrect courts", "Sport reconstruction\n(coach role!)",
-         COLOR_ACCENT, "Success"),
-        ("Pattern 6", "e4b/EN\npersonas + PA", "Group drama\n+ FAN culture (1138 cheers!)",
-         COLOR_ACCENT, "Success"),
-        ("Pattern 7", "e4b/EN\nlunar / nameless", "Invented activities!\n'Punctuation Pass'…",
-         COLOR_PRIMARY, "Discovery"),
+         COLOR_ACCENT, "Foundation"),
+        ("Pattern 6", "Badminton\n+ personas", "FAN culture explosion\n(1138 cheers!)",
+         COLOR_ACCENT, "Cell 1/4"),
+        ("Pattern 7", "Lunar / nameless\n+ personas", "Invented activities\n'Punctuation Pass'",
+         COLOR_PRIMARY, "Cell 2/4"),
+        ("Pattern 8", "Lunar / nameless\nNO personas", "Engineering culture\n(structure / rod)",
+         COLOR_PRIMARY, "Cell 3/4"),
+        ("Pattern 9", "Badminton\nNO personas", "Drill / rehearsal\n(no fans)",
+         COLOR_PRIMARY, "Cell 4/4"),
     ]
 
     n = len(patterns)
-    spacing = 12 / (n + 1)
+    spacing = 15 / (n + 1)
     for i, (name, setup, finding, color, label) in enumerate(patterns):
         x = (i + 1) * spacing
         # Pattern node
-        circle = patches.Circle((x, 3.6), 0.45,
+        circle = patches.Circle((x, 3.7), 0.42,
                                 facecolor=color, edgecolor="white", linewidth=2)
         ax.add_patch(circle)
-        ax.text(x, 3.6, str(i + 1), ha="center", va="center",
-                fontsize=14, fontweight="bold", color="white")
+        ax.text(x, 3.7, str(i + 1), ha="center", va="center",
+                fontsize=13, fontweight="bold", color="white")
         # Pattern name
-        ax.text(x, 4.4, name, ha="center", fontsize=9.5,
+        ax.text(x, 4.5, name, ha="center", fontsize=9,
                 fontweight="bold", color=COLOR_TEXT)
         # Setup
-        ax.text(x, 2.8, setup, ha="center", fontsize=7.5,
+        ax.text(x, 2.85, setup, ha="center", fontsize=7,
                 color=COLOR_MUTED)
         # Finding
-        ax.text(x, 1.9, finding, ha="center", fontsize=8,
+        ax.text(x, 1.85, finding, ha="center", fontsize=7.5,
                 color=COLOR_TEXT)
         # Status label
-        ax.text(x, 0.9, label, ha="center", fontsize=8.5,
+        ax.text(x, 0.85, label, ha="center", fontsize=8,
                 fontweight="bold", color=color)
 
     # Connecting line
-    ax.plot([spacing - 0.3, n * spacing + 0.3], [3.6, 3.6],
+    ax.plot([spacing - 0.3, n * spacing + 0.3], [3.7, 3.7],
             color=COLOR_MUTED, linewidth=1.5, alpha=0.4, zorder=0)
 
-    ax.text(6, 5.5, "7 Patterns — From Failure to Discovery",
-            ha="center", fontsize=14, fontweight="bold", color=COLOR_TEXT)
-    ax.text(6, 5.05, "Each pattern systematically modified one variable",
-            ha="center", fontsize=10, color=COLOR_MUTED, style="italic")
+    # Background bands to visually group preliminary (1-5) and main (6-9)
+    prelim_x0 = spacing * 0.5
+    prelim_x1 = spacing * 5 + spacing * 0.5
+    main_x0 = spacing * 5 + spacing * 0.5
+    main_x1 = spacing * 9 + spacing * 0.5
+    ax.add_patch(patches.Rectangle(
+        (prelim_x0, 0.2), prelim_x1 - prelim_x0, 5.0,
+        facecolor="#f1f5f9", alpha=0.35, zorder=-1, linewidth=0,
+    ))
+    ax.add_patch(patches.Rectangle(
+        (main_x0, 0.2), main_x1 - main_x0, 5.0,
+        facecolor="#ede9fe", alpha=0.55, zorder=-1, linewidth=0,
+    ))
+
+    # Labels for each band
+    ax.text((prelim_x0 + prelim_x1) / 2, 5.7,
+            "Preliminary patterns (Patterns 1–5)",
+            ha="center", fontsize=10, fontweight="bold", color=COLOR_MUTED)
+    ax.text((main_x0 + main_x1) / 2, 5.7,
+            "★ Main 2×2 experiment (Patterns 6–9)",
+            ha="center", fontsize=10.5, fontweight="bold", color="#6d28d9")
+
+    ax.text(7.5, 6.15, "9 Patterns — From Trial-and-Error to a Complete 2×2 Experiment",
+            ha="center", fontsize=13, fontweight="bold", color=COLOR_TEXT)
 
     plt.tight_layout()
     out = FIG / "02_pattern_timeline.png"

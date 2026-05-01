@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Beyond Badminton — 説明資料</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Noto Sans JP", "Hiragino Sans", "Meiryo", sans-serif;
+    color: #0f172a;
+    line-height: 1.65;
+    margin: 0;
+    background: #ffffff;
+  }
+  h1, h2, h3, h4 { color: #1e293b; line-height: 1.3; }
+  h1 { font-size: 1.8em; border-bottom: 3px solid #6366f1; padding-bottom: 8px; }
+  h2 { font-size: 1.35em; border-left: 5px solid #6366f1; padding-left: 12px; margin-top: 32px; }
+  h3 { font-size: 1.1em; color: #6366f1; margin-top: 22px; }
+  p { margin: 8px 0; }
+  .page { padding: 0 0 30px; page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+  .cover {
+    text-align: center;
+    padding: 80px 40px;
+    background: linear-gradient(135deg, #eef2ff 0%, #f0fdf4 100%);
+    border-radius: 12px;
+    margin-bottom: 0;
+  }
+  .cover h1 {
+    font-size: 2.4em;
+    border: none;
+    color: #4338ca;
+    margin-bottom: 8px;
+  }
+  .cover .subtitle { font-size: 1.2em; color: #6366f1; font-style: italic; margin-bottom: 60px; }
+  .cover .meta { font-size: 1.1em; color: #475569; line-height: 2.0; }
+  .cover .meta strong { color: #1e293b; }
+  figure { margin: 18px 0; text-align: center; page-break-inside: avoid; }
+  figure img { max-width: 100%; height: auto; border-radius: 6px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  figure figcaption { font-size: 0.85em; color: #64748b; margin-top: 6px; font-style: italic; }
+  .two-col { display: flex; gap: 16px; }
+  .two-col figure { flex: 1; }
+  .four-col { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .four-col figure { margin: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.92em; }
+  th, td { padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; vertical-align: top; }
+  th { background: #f1f5f9; color: #1e293b; font-weight: 600; }
+  tr:hover { background: #fafafa; }
+  blockquote {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 12px 18px;
+    margin: 14px 0;
+    font-style: italic;
+    color: #78350f;
+    border-radius: 0 6px 6px 0;
+  }
+  .highlight {
+    background: #ddd6fe;
+    color: #4338ca;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .accent {
+    background: #d1fae5;
+    color: #065f46;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  .danger {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+  }
+  ul { margin: 6px 0; padding-left: 24px; }
+  li { margin: 3px 0; }
+  .quote-box {
+    background: #f0f9ff;
+    border-left: 4px solid #0284c7;
+    padding: 14px 18px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .quote-box .source {
+    font-size: 0.85em;
+    color: #64748b;
+    margin-top: 4px;
+  }
+  .key-finding {
+    background: #faf5ff;
+    border: 2px solid #a78bfa;
+    padding: 16px 20px;
+    border-radius: 10px;
+    margin: 18px 0;
+  }
+  .key-finding h4 { margin-top: 0; color: #6d28d9; }
+  .footer-strip {
+    margin-top: 40px;
+    padding: 14px 18px;
+    background: #f8fafc;
+    border-radius: 6px;
+    color: #64748b;
+    font-size: 0.85em;
+    text-align: center;
+  }
+  /* 2×2 ablation matrix */
+  .ablation-matrix {
+    display: grid;
+    grid-template-columns: 110px 1fr 1fr;
+    gap: 8px;
+    margin: 16px 0;
+    font-size: 0.9em;
+  }
+  .ablation-matrix .cell {
+    padding: 14px 14px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #ffffff;
+  }
+  .ablation-matrix .header {
+    background: #f1f5f9;
+    font-weight: 700;
+    text-align: center;
+    color: #1e293b;
+  }
+  .ablation-matrix .row-label {
+    background: #f1f5f9;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1e293b;
+  }
+  .ablation-matrix .p6 { background: #fef3c7; border-color: #fbbf24; }
+  .ablation-matrix .p7 { background: #ede9fe; border-color: #a78bfa; }
+  .ablation-matrix .p9 { background: #fef9c3; border-color: #facc15; }
+  .ablation-matrix .p8 { background: #e0e7ff; border-color: #818cf8; }
+  .ablation-matrix .pat-name {
+    font-weight: 700;
+    font-size: 1.05em;
+    margin-bottom: 4px;
+  }
+  .ablation-matrix .pat-tag {
+    font-size: 0.82em;
+    color: #475569;
+    margin-bottom: 6px;
+  }
+  .ablation-matrix .pat-stats {
+    font-size: 0.82em;
+    color: #1e293b;
+    line-height: 1.5;
+  }
+  /* Comparison heatmap-ish table */
+  .compare-table td.high { background: #fef3c7; font-weight: 700; color: #92400e; }
+  .compare-table td.mid  { background: #ecfccb; color: #3f6212; }
+  .compare-table td.low  { background: #f1f5f9; color: #475569; }
+  .compare-table td.zero { background: #fee2e2; color: #991b1b; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- ============== 表紙 ============== -->
+<div class="cover page">
+  <h1>Beyond Badminton</h1>
+  <div class="subtitle">―― シンギュラリティ後のスポーツ創発 ――</div>
+  <div style="font-size: 1.05em; color: #4338ca; margin: 20px 0 60px; font-weight: 600;">
+    人工生命は、自分たちでスポーツと物語を作れるか？<br>
+    <span style="font-size: 0.85em; color: #6d28d9;">そして、創造的文化は何から生まれるのか？</span>
+  </div>
+  <div class="meta">
+    <div><strong>チーム名:</strong> Singu-Sport Lab（シンギュスポーツラボ）</div>
+    <div><strong>提出者:</strong> 下村航平 ・ TaE</div>
+    <div><strong>提出日:</strong> 2026 年 5 月</div>
+    <div><strong>ハッカソン:</strong> LLMエージェントハッカソン・アイデアソン</div>
+  </div>
+  <div style="margin-top: 100px; font-size: 0.9em; color: #64748b;">
+    本資料は、20 体の LLM エージェントを 2D 空間に配置し、<br>
+    <em>遊び・スポーツ・物語</em> の創発を観察した実証実験の報告です。<br>
+    <span style="color: #6d28d9; font-weight: 600;">
+      ペルソナ × 文脈 の 2×2 比較実験により、創造性の駆動因を切り分けました。
+    </span>
+  </div>
+</div>
+
+<!-- ============== 1. プロジェクト概要 ============== -->
+<div class="page">
+  <h1>1. プロジェクト概要</h1>
+
+  <p style="font-size: 1.15em; line-height: 1.7; padding: 16px 20px; background: linear-gradient(135deg, #eef2ff 0%, #f0fdf4 100%); border-radius: 10px; margin: 16px 0 28px;">
+    <strong style="color: #4338ca;">
+      バドミントンを舞台に、AI 集団からスポーツとファンが生まれる条件を、実験で特定した。
+    </strong>
+  </p>
+
+  <h3>なぜバドミントンか</h3>
+  <p>
+    バドミントンは、観客の 95% が競技経験者と言われるほど
+    <strong>「ファンが極めて少ない」スポーツ</strong> である。
+    どうすれば未経験者にもファンになってもらえるのか —— この
+    <strong>現実のスポーツ振興の課題</strong> を、AI シミュレーションで先回りに検証することが、
+    本研究の出発点となった。
+  </p>
+
+  <h3>実験の概要</h3>
+  <p>
+    20 体の LLM エージェントを 2D 仮想空間に配置し、
+    <strong>「ペルソナの有無 × 文脈（バドミントン or 名前なき空間）の有無」</strong>
+    の 4 つの組合せを比較する実験を行った。
+    ファン文化や新しい遊びが、何をきっかけに生まれるのか
+    <span class="highlight">条件を切り分けて確かめる</span> ことが目的である。
+  </p>
+
+  <h3>主要な発見</h3>
+  <div class="key-finding">
+    <h4>創造的文化は「個性 × 文脈」の両方が揃ったときだけ生まれる</h4>
+    <ul>
+      <li><span class="accent">ファン文化（応援）：</span>
+        バドミントン × 個性ありのときだけ <span class="highlight">1,138 件</span> 発生。
+        どちらか欠けると <span class="danger">ほぼゼロ</span>。</li>
+      <li><span class="accent">新しい遊びの発明：</span>
+        月面・名前なき × 個性ありのときだけ独自の動き（"Punctuation Pass" 等）が生まれた。</li>
+      <li><span class="accent">個性なしの集団の傾向：</span>
+        応援も発明も起きず、代わりに「構造を作ること」（道具の組み立てや手順の設計）に向かう。</li>
+      <li><span class="accent">文脈の役割：</span>
+        文脈は「何を題材にするか」を決めるが、それだけでは豊かな文化は生まれない。</li>
+    </ul>
+  </div>
+
+  <p style="margin-top: 24px; padding: 14px 18px; background: #faf5ff; border-radius: 8px; border-left: 4px solid #a78bfa;">
+    <strong>結論：</strong>
+    AI 集団が応援や新しい遊びといった
+    <strong>豊かな文化を生むには、エージェント同士の "個性の差" が決定的</strong>。
+    どんなに刺激的な舞台を用意しても、個性が揃わないと文化は形だけのものになる。
+    この発見は、現実のスポーツ振興（特にファン拡大）にも直接応用できる示唆を持つ。
+  </p>
+</div>
+
+<!-- ============== 2. 背景と問い ============== -->
+<div class="page">
+  <h1>2. 背景と問い</h1>
+
+  <h3>哲学的背景：ホイジンガとカイヨワ</h3>
+  <p>
+    オランダの歴史家 <strong>ヨハン・ホイジンガ</strong>は、著書
+    <em>『ホモ・ルーデンス』(原著 1938)</em> の中で、
+    人類文化の中核には「遊び (play)」があると論じた。
+    彼は遊びを <em>自由で、日常から切り離され、秩序を作り、物質的利益を生まない</em>
+    活動として定義した。
+  </p>
+  <p>
+    フランスの社会学者 <strong>ロジェ・カイヨワ</strong>は、著書
+    <em>『遊びと人間 (Les jeux et les hommes, 1958)』</em> で
+    遊びを 4 つに分類した：
+    <strong>Agon（競争）</strong>、<strong>Alea（運）</strong>、
+    <strong>Mimicry（模倣）</strong>、<strong>Ilinx（めまい）</strong>。
+    また、即興的で自由な <strong>Paidia（自由遊び）</strong> から、
+    規則によって整えられた <strong>Ludus（規則遊び）</strong> への連続体として
+    整理されると論じた。スポーツは典型的に「規則的な競争（Agon × Ludus）」の領域にある。
+  </p>
+  <p>
+    本研究では、この古典的なフレームワークを参照しつつ、<strong>シンギュラリティ後の世界
+    ―― AI エージェントが自律的に振る舞う未来の社会 ―― において、
+    彼らは自らスポーツと物語を作れるのだろうか？</strong>
+    という問いを扱う。
+  </p>
+
+  <h3>3 つの問い</h3>
+  <table>
+    <tr><th>#</th><th>問い</th></tr>
+    <tr>
+      <td>1</td>
+      <td>「ルールや環境を <strong>作る人</strong>、実際に <strong>プレーする人</strong>、
+          それを <strong>観る人</strong>」 といった役割は自然発生するのか？</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>そもそも、限られた環境・道具の中から
+          <strong>「スポーツ」と呼べるもの</strong> は生まれるのか？</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>プレイヤー以外の「観る人」「応援する人」、すなわち
+          <strong>"ファン"</strong> はどう生まれるのか？</td>
+    </tr>
+  </table>
+
+  <blockquote>
+    本実験で検証したかった核心：<br>
+    <strong>「環境を整えることで、AI 集団から自然にファンを生み出せるのか。
+    そのために必要な条件は何か」</strong>
+  </blockquote>
+</div>
+
+<!-- ============== 3. 実験設計 ============== -->
+<div class="page">
+  <h1>3. 実験設計</h1>
+
+  <figure>
+    <img src="figures/01_system_diagram.png" alt="System architecture">
+    <figcaption>図 1: システム構成図 ― YAML 設定 → シミュレーション → LLM(gemma4:e4b) → ビジュアライザの全体像</figcaption>
+  </figure>
+
+  <h3>主要コンポーネント</h3>
+  <ul>
+    <li><strong>Simulation engine (Python)</strong>:
+      2D 空間で 20 エージェントの行動・通信・移動を管理</li>
+    <li><strong>LLM (gemma4:e4b via Ollama)</strong>:
+      各エージェントの「メッセージ決定」と「行動決定」を生成
+      （温度 0.2、num_ctx 2048、num_gpu 999 で 100% GPU 配置）</li>
+    <li><strong>Persona system</strong>:
+      6 アーキタイプ × 20 エージェントの個性付与
+      （2×2 比較実験では <em>削除可能な変数</em> として扱う）</li>
+    <li><strong>Announcement system</strong>:
+      特定ステップで全エージェントに配信される
+      <strong>PA システム</strong>（Public Address; 場内放送）のメッセージ。
+      競技開始やハイライト撮影など、状況の変化を一斉に伝える役割を担う</li>
+    <li><strong>Visualizer</strong>:
+      matplotlib で各ステップを PNG レンダリング、HTML ビューワーで再生可能</li>
+  </ul>
+
+  <figure>
+    <img src="figures/05_personas.png" alt="Personas">
+    <figcaption>図 2: 20 エージェントは 6 アーキタイプに分類され、個別の性格設定を持つ。2×2 比較実験ではこの個性付与の有無が因子となる。</figcaption>
+  </figure>
+
+  <h3>主要パラメータ</h3>
+  <table>
+    <tr><th>項目</th><th>値</th></tr>
+    <tr><td>モデル</td><td>gemma4:e4b（Effective 4B params, "thinking" mode OFF）</td></tr>
+    <tr><td>言語</td><td>英語（推論精度を優先）</td></tr>
+    <tr><td>エージェント数</td><td>20（男女 10:10）</td></tr>
+    <tr><td>フィールド</td><td>14×14（屋内施設の壁）</td></tr>
+    <tr><td>コート / アリーナ</td><td>3 × 7（実寸比 2.33:1、capacity 6）</td></tr>
+    <tr><td>通信半径</td><td>4（同一場所 / 同一外部空間でのみ通信可）</td></tr>
+    <tr><td>時間ステップ</td><td>100（PA アナウンス：step 34, 67）</td></tr>
+  </table>
+</div>
+
+<!-- ============== 4. 9 パターンの旅 ============== -->
+<div class="page">
+  <h1>4. 9 パターンの実験旅</h1>
+
+  <p>
+    本研究は <strong>9 パターン</strong> の系統的実験を経て、最終的な発見へ到達した。
+    各パターンで <strong>1 つの変数だけ</strong> を変えることで、
+    どの設計判断が創発に効くのかを切り分けた。
+  </p>
+
+  <figure>
+    <img src="figures/02_pattern_timeline.png" alt="Pattern timeline">
+    <figcaption>図 3: 9 パターンの推移 — 失敗、介入、再構築、発明、そして 2×2 比較実験へ</figcaption>
+  </figure>
+
+  <h3>準備段階：Patterns 1-5（実験条件の探索）</h3>
+  <p>
+    最初の 5 パターンは、本研究の <strong>メイン実験を成立させるための条件探索</strong>
+    だった。失敗パターン (1-4) は LLM の挙動の限界を可視化し、Pattern 5 で
+    「英語 + e4b モデル + 矩形コート」の組合せが創発を支える基盤となることが判明した。
+  </p>
+  <table style="background: #f8fafc; font-size: 0.88em;">
+    <tr style="background: #f1f5f9;">
+      <th>#</th><th>設定</th><th>主な発見</th><th>判定</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>qwen2.5/JP, radius 3, hazards</td>
+      <td>哲学的議論への暴走（"我々は静寂の共鳴体である"）</td>
+      <td><span class="danger">失敗</span></td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>e2b/JP, radius 2, hazards</td>
+      <td>通信が届かず孤立、120 ステップ無音</td>
+      <td><span class="danger">失敗</span></td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>e2b/JP, intervention, hazards</td>
+      <td>ルール議論が出現するが部分的</td>
+      <td>部分的</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>e2b/JP, no hazards, 1 room/2 courts</td>
+      <td>「ウォームアップ」議論が無限ループ</td>
+      <td>停滞</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>e4b/EN, real rectangular courts</td>
+      <td>Agent 13 がコーチ役へ自発進化（基盤確立）</td>
+      <td><span class="accent">成功</span></td>
+    </tr>
+  </table>
+
+  <h3 style="color: #6d28d9; margin-top: 32px;">★ 本研究のメイン実験：Patterns 6-9</h3>
+  <p>
+    Pattern 5 で確立した基盤の上に、<strong>「ペルソナ（個性）の有無」「文脈の有無」</strong>
+    の 2 軸を独立に操作する <strong>2×2 比較実験</strong> を構築した。
+    この 4 パターン（P6/P7/P8/P9）が、本研究の中心的な解析対象である。
+  </p>
+
+  <h3>2×2 比較実験：4 セル設計</h3>
+  <p>
+    Patterns 6-9 を 2×2 マトリクスに配置すると、本実験の構造が一目瞭然となる：
+  </p>
+
+  <div class="ablation-matrix">
+    <div class="cell header"></div>
+    <div class="cell header">バドミントン<br><span style="font-weight: 400; font-size: 0.85em;">(既知の文脈)</span></div>
+    <div class="cell header">月面・名前なき空間<br><span style="font-weight: 400; font-size: 0.85em;">(未知の文脈)</span></div>
+
+    <div class="cell row-label">ペルソナ<br>あり</div>
+    <div class="cell p6">
+      <div class="pat-name">Pattern 6</div>
+      <div class="pat-tag" style="font-size: 0.95em; color: #92400e; font-weight: 600;">✨ ファンが大量発生</div>
+      <div class="pat-stats">応援 1,138 件<br>試合・観戦・応援の役割が成立</div>
+    </div>
+    <div class="cell p7">
+      <div class="pat-name">Pattern 7</div>
+      <div class="pat-tag" style="font-size: 0.95em; color: #6d28d9; font-weight: 600;">🌙 新しい遊びを発明</div>
+      <div class="pat-stats">"Punctuation Pass" 413 件<br>独自の動きを命名</div>
+    </div>
+
+    <div class="cell row-label">ペルソナ<br>なし</div>
+    <div class="cell p9">
+      <div class="pat-name">Pattern 9</div>
+      <div class="pat-tag" style="font-size: 0.95em; color: #854d0e; font-weight: 600;">📋 反復訓練のみ</div>
+      <div class="pat-stats">手順は組むが応援なし<br>ドリル 4,231 件</div>
+    </div>
+    <div class="cell p8">
+      <div class="pat-name">Pattern 8</div>
+      <div class="pat-tag" style="font-size: 0.95em; color: #3730a3; font-weight: 600;">🔧 工学的探索のみ</div>
+      <div class="pat-stats">構造を測定・分析<br>遊びは生まれない</div>
+    </div>
+  </div>
+
+  <p>
+    <strong>2×2 比較実験</strong>の利点は、各要因の <em>単独の効果</em> と
+    <em>組合せの効果</em> をすべて切り分けられることにある。これにより
+    「文脈を変えるだけで創発が起こる」「個性が決定的」といった仮説を
+    実験的に確かめられる。
+  </p>
+
+  <h3>系統的アプローチの意義</h3>
+  <p>
+    失敗パターン (1-4) は、LLM の挙動の限界を理解する重要なデータとなった。
+    そこから導かれた Pattern 5 で <em>基盤条件</em> を確立し、Patterns 6-9 で
+    <em>創造的文化が生まれるために必要な条件</em> を特定した。
+    全 9 パターンを通じて、本研究は単なる現象記述から原因究明へと深化した。
+  </p>
+</div>
+
+<!-- ============== 5.1: Patterns 1-5 サマリー ============== -->
+<div class="page">
+  <h1>5. 主要結果</h1>
+
+  <h2>5.1 Patterns 1-5：本実験への準備</h2>
+
+  <p>
+    本研究のメイン実験（Patterns 6-9）に至る前に、5 つの予備パターンを通じて
+    LLM 集団の挙動を観察し、創発を支える基盤条件を特定した。
+  </p>
+
+  <h3>失敗の系譜（Patterns 1-4）</h3>
+  <p>
+    最初の 4 パターンは、適切な実験条件を見出すまでの試行錯誤だった：
+  </p>
+  <ul>
+    <li><strong>Pattern 1</strong>（qwen2.5 / 日本語 / hazards）：
+      通信が活発すぎて、エージェントが <em>哲学的議論への暴走</em> を起こした
+      （"我々は静寂の共鳴体である" 等）</li>
+    <li><strong>Pattern 2</strong>（e2b / 日本語 / radius 2）：
+      通信半径を絞りすぎ、120 ステップ無音の <em>停滞状態</em> に</li>
+    <li><strong>Pattern 3-4</strong>（介入プロンプト導入）：
+      改善は見られたが、ルール議論が表層的に留まり <em>創発に達しない</em></li>
+  </ul>
+  <p>
+    これらの失敗から、<strong>「英語プロンプト + e4b モデル + 適度な通信半径」</strong>
+    が創発の前提条件であることが判明した。
+  </p>
+
+  <h3>Pattern 5：基盤確立とブレイクスルー</h3>
+  <p>
+    実寸比の矩形コート、英語プロンプト、e4b モデルへの切替により、
+    20 エージェントが初めて <strong>バドミントン的活動</strong> を自発的に立ち上げた。
+    キーワード（match 567 / shuttle 480 / serve 451 等）が示すように、
+    LLM 集団がスポーツらしい振る舞いを生み出すための基盤が、ここで整った。
+  </p>
+  <p>
+    興味深い副次的観察として、<strong>Agent 13 という 1 体のエージェント</strong>が、
+    「召集役 → ドリル設計者 → パフォーマー → コーチ → ディレクター」へと
+    100 ステップの中で自発的に役割を進化させる現象も確認された。
+    個体レベルの役割形成は LLM 集団で自然に起こり得ることが示された。
+  </p>
+
+  <figure>
+    <img src="figures/04_phase_progression.png" alt="Phase progression">
+    <figcaption>図 4: Pattern 5 で観察された遊びの段階進化（Play → Game → Sport）</figcaption>
+  </figure>
+
+  <p style="margin-top: 24px; padding: 12px; background: #faf5ff; border-radius: 6px; border-left: 4px solid #a78bfa;">
+    <strong>👇 ここから本研究のメイン実験（Patterns 6-9 の 2×2 比較）を順に解説する。</strong>
+  </p>
+</div>
+
+<!-- ============== 5.2: Pattern 6 ============== -->
+<div class="page">
+  <h2>5.2 Pattern 6 [セル 1/4]：ペルソナ群像劇 + ファン文化創発</h2>
+  <p style="background: #fef3c7; padding: 8px 14px; border-radius: 6px; margin-top: 8px;">
+    <strong>条件：</strong> バドミントン文脈（既知） × ペルソナあり
+  </p>
+
+  <p>
+    20 エージェントに <strong>個別ペルソナ</strong> を付与し、
+    途中で 2 回の <strong>PA システムアナウンス</strong> を流した。
+    結果、応援・歓声文化が <strong>爆発的に発生</strong>。
+  </p>
+
+  <div class="two-col">
+    <figure>
+      <img src="figures/p6_step40.png" alt="P6 step 40">
+      <figcaption>Pattern 6 Step 40 — 1 コート、観戦エージェント周辺に</figcaption>
+    </figure>
+    <figure>
+      <img src="figures/p6_step80.png" alt="P6 step 80">
+      <figcaption>Pattern 6 Step 80 — ハイライト録画フェーズ</figcaption>
+    </figure>
+  </div>
+
+  <h3>キーワード爆増</h3>
+  <table>
+    <tr><th>カテゴリ</th><th>数値</th><th>備考</th></tr>
+    <tr><td>cheer（応援）</td><td><span class="highlight">1,138</span></td><td>Pattern 5 では 1 件のみ</td></tr>
+    <tr><td>fan</td><td>254</td><td>初の本格的「ファン」言及</td></tr>
+    <tr><td>match（試合）</td><td>1,062</td><td>2 倍に</td></tr>
+    <tr><td>game</td><td>828</td><td>2.8 倍</td></tr>
+    <tr><td>drill</td><td>3,288</td><td>練習文化</td></tr>
+    <tr><td>spectator</td><td>28</td><td>初登場</td></tr>
+  </table>
+
+  <h3>役割分化の確認</h3>
+  <p>キャパシティ制約 (capacity 6) と PA アナウンスの組合せで、
+  20 名中 14 名が必然的に <strong>観戦・応援サイド</strong> に回り、ファン文化が育つ <strong>構造的条件</strong> が成立した。</p>
+
+  <div class="quote-box">
+    "The energy is at a fever pitch! Agent 6 is leading the count, Agent 13 is anchoring the focus, and I am right here, ready to be the loudest hype machine!"
+    <div class="source">— Agent 11 (Enthusiastic Supporter persona), Step 25</div>
+  </div>
+
+  <div class="quote-box">
+    "We are here to perform, not to plan a festival. The standard is measurable execution."
+    <div class="source">— Agent 1 (Strategic Champion persona), Step 35</div>
+  </div>
+
+  <p>
+    <strong>個別ペルソナがあることで、20 名の異なる "声" が生まれ、群像劇が成立した。</strong>
+  </p>
+</div>
+
+<!-- ============== 5.3: Pattern 7 ============== -->
+<div class="page">
+  <h2>5.3 Pattern 7 [セル 2/4]：名前なき空間で新しい遊びを発明</h2>
+  <p style="background: #ede9fe; padding: 8px 14px; border-radius: 6px; margin-top: 8px;">
+    <strong>条件：</strong> 月面・名前なき文脈（未知） × ペルソナあり
+  </p>
+
+  <p>
+    舞台を <strong>月面ハビタット β</strong> に、エージェントを <strong>人工生命体</strong> に、
+    設備の名前を全て <strong>"long mesh-tipped objects"、"flying objects"、"vertical barrier"</strong>
+    に置き換えた（バドミントン用語 court / racket / shuttle / net / doubles / singles を全削除）。
+  </p>
+
+  <blockquote>
+    <strong>注意：Pattern 7 の物理環境について</strong><br>
+    本実験は <strong>2D グリッド上の言語ベースのシミュレーション</strong> であり、
+    物理的な月面環境（低重力・真空・気密性など）は <strong>再現していない</strong>。
+    「月面ハビタット」「人工生命体」という設定は、<em>テキスト記述として</em> 与えたのみで、
+    LLM がその文脈をどう解釈し、どんな振る舞いを生むかを観察した。
+  </blockquote>
+
+  <div class="two-col">
+    <figure>
+      <img src="figures/p7_step30.png" alt="P7 step 30">
+      <figcaption>Pattern 7 Step 30 — 月面アリーナ、エージェント探索中</figcaption>
+    </figure>
+    <figure>
+      <img src="figures/p7_step80.png" alt="P7 step 80">
+      <figcaption>Pattern 7 Step 80 — アリーナ外で独自活動が展開</figcaption>
+    </figure>
+  </div>
+
+  <figure>
+    <img src="figures/03_p6_vs_p7.png" alt="P6 vs P7">
+    <figcaption>図 5: Pattern 6 と Pattern 7 のキーワード比較。バドミントン語彙はゼロ、独自概念が爆発。</figcaption>
+  </figure>
+
+  <h3>発明された活動概念（Pattern 7 オリジナル）</h3>
+  <table>
+    <tr><th>発明された概念</th><th>出現数</th><th>性質</th></tr>
+    <tr><td>Punctuation Pass</td><td>413</td><td>新しい動作 / ゲーム名</td></tr>
+    <tr><td>Pass-Circle-Pass</td><td>309</td><td>循環的なパスゲーム</td></tr>
+    <tr><td>Silent Transfer</td><td>196</td><td>静かな受け渡し</td></tr>
+    <tr><td>Shape-Pass</td><td>168</td><td>形を作るパス</td></tr>
+    <tr><td>Light-Led</td><td>150</td><td>光によるリード</td></tr>
+    <tr><td>Language of movement</td><td>16</td><td><em>メタ認知:「動きの言語」</em></td></tr>
+  </table>
+
+  <div class="quote-box">
+    "It sounds like we're building a whole language of movement in this room.
+     Agent 17's 'timed frame' and Agent 18's focus on a strong, simple pass both sound really engaging."
+    <div class="source">— Agent 19 (Casual / "first encounter, no agenda" persona), Step 65</div>
+  </div>
+
+  <p>
+    総メッセージ数：Pattern 6 = 5,442 / Pattern 7 = 19,183（3.5 倍）。
+    アリーナ自体は早期に空になっても、エージェント同士は外側で活発に議論し続け、
+    新しい動きの言語を共同設計した。
+  </p>
+</div>
+
+<!-- ============== 5.4: Pattern 8 ============== -->
+<div class="page">
+  <h2>5.4 Pattern 8 [セル 3/4]：月面 × ペルソナなし → 工学的探索文化</h2>
+  <p style="background: #e0e7ff; padding: 8px 14px; border-radius: 6px; margin-top: 8px;">
+    <strong>条件：</strong> 月面・名前なき文脈（未知） × ペルソナなし
+  </p>
+
+  <p>
+    Pattern 7 と <strong>完全に同じ環境</strong>（月面・名前なき道具・PA アナウンス）で、
+    <strong>20 ペルソナを削除</strong> した比較条件。世界・道具・刺激は同一、
+    変えたのはエージェントの <em>個性の有無</em> のみ。
+  </p>
+
+  <h3>結果：ファン文化も新言語発明も「消滅」した</h3>
+  <table>
+    <tr><th>キーワード</th><th>P7（ペルソナあり）</th><th>P8（ペルソナなし）</th><th>変化</th></tr>
+    <tr><td>cheer（応援）</td><td>357</td><td><span class="danger">0</span></td><td>消滅</td></tr>
+    <tr><td>Punctuation Pass</td><td>413</td><td><span class="danger">0</span></td><td>発明されない</td></tr>
+    <tr><td>Pass-Circle-Pass</td><td>309</td><td><span class="danger">0</span></td><td>発明されない</td></tr>
+    <tr><td>Silent Transfer</td><td>196</td><td><span class="danger">0</span></td><td>発明されない</td></tr>
+    <tr><td>language of movement</td><td>16</td><td><span class="danger">0</span></td><td>メタ認知も発生せず</td></tr>
+    <tr><td>rhythm（リズム文化）</td><td>10,371</td><td>215</td><td><span class="danger">98% 減少</span></td></tr>
+  </table>
+
+  <h3>代わりに何が起きたか — 「工学的探索文化」</h3>
+  <table>
+    <tr><th>キーワード</th><th>P7</th><th>P8</th><th>性質</th></tr>
+    <tr><td>structure（構造）</td><td>12,160</td><td><span class="highlight">14,229</span></td><td>建造的議論</td></tr>
+    <tr><td>rod（棒）</td><td>3,235</td><td><span class="highlight">17,228</span></td><td>道具を「rod」と呼ぶ</td></tr>
+    <tr><td>pole（棒）</td><td>15,184</td><td><span class="danger">0</span></td><td>P7 とは違う命名</td></tr>
+    <tr><td>framework</td><td>—</td><td>1,826</td><td>新登場</td></tr>
+    <tr><td>grid（格子）</td><td>—</td><td>2,580</td><td>新登場</td></tr>
+    <tr><td>lattice / scaffold</td><td>—</td><td>少量</td><td>新登場</td></tr>
+  </table>
+
+  <p>
+    総メッセージ数：<strong>19,330</strong> 件（P7 とほぼ同じ）。
+    つまり <em>議論量は変わらないが、議論の質が一変した</em>。
+    P8 のエージェントたちは <strong>「測定」「構造」「最適化」</strong> という工学言説に集中し、
+    Punctuation Pass のような <em>遊びの命名</em> は一切しなかった。
+  </p>
+
+  <div class="quote-box">
+    Agent 19: "I'll use the light objects to trace the perimeter of the area, treating the rods you place as fixed boundaries. This will help us visualize the full operational envelope before we start testing the lights through the channels."
+    <div class="source">— Pattern 8（ペルソナなし / 月面）, ステップ後半</div>
+  </div>
+
+  <div class="key-finding">
+    <h4>P8 の解釈</h4>
+    <p>
+      <strong>未知の文脈を与えても、ペルソナがないと「動きの言語」は発明されない。</strong>
+      代わりに、エージェントたちは <em>「環境を分析・測定・構造化する」</em>
+      工学的探索モードに集合的に切り替わる。
+      これは "創造性" ではなく "技術者集団的なシステム理解" である。
+    </p>
+  </div>
+</div>
+
+<!-- ============== 5.5: Pattern 9 ============== -->
+<div class="page">
+  <h2>5.5 Pattern 9 [セル 4/4]：バドミントン × ペルソナなし → 反復訓練文化</h2>
+  <p style="background: #fef9c3; padding: 8px 14px; border-radius: 6px; margin-top: 8px;">
+    <strong>条件：</strong> バドミントン文脈（既知） × ペルソナなし
+  </p>
+
+  <p>
+    Pattern 6 と <strong>完全に同じ環境</strong>（バドミントンコート・PA アナウンス）で、
+    <strong>20 ペルソナを削除</strong> した比較条件。これにより 2×2 設計の
+    最後のセルが埋まった。
+  </p>
+
+  <h3>結果：ファン文化が「消滅」、代わりに 反復訓練が支配</h3>
+  <table>
+    <tr><th>キーワード</th><th>P6（ペルソナあり）</th><th>P9（ペルソナなし）</th><th>変化</th></tr>
+    <tr><td>cheer（応援）</td><td><span class="highlight">1,138</span></td><td><span class="danger">0</span></td><td>消滅</td></tr>
+    <tr><td>fan</td><td>254</td><td>少量</td><td>大幅減少</td></tr>
+    <tr><td>spectator</td><td>28</td><td>少量</td><td>役割分化なし</td></tr>
+    <tr><td>match（試合）</td><td>1,062</td><td>760</td><td>維持（既知文脈の効果）</td></tr>
+    <tr><td>drill（ドリル）</td><td>3,288</td><td><span class="highlight">4,231</span></td><td><strong>4セル中最高</strong></td></tr>
+    <tr><td>shuttle</td><td>993</td><td>498</td><td>道具認識は維持</td></tr>
+    <tr><td>structure</td><td>3,880</td><td>3,933</td><td>同等</td></tr>
+  </table>
+
+  <h3>代表観察：「演出としての構造化」</h3>
+  <p>
+    P9 では、エージェントが <em>遊びそのもの</em> ではなく <em>遊びの実行プロトコル</em>
+    を共同で組み立てる傾向が顕著に観察された：
+  </p>
+
+  <div class="quote-box">
+    "Okay, I think we have a perfect, escalating structure now. Agent 14, your proposal to use the clap as the trigger for Agent 19's settling, followed by a three-count hold, is the definitive closing sequence we need.
+    For the third run, we execute the full sequence:
+    <strong>Handover → My Clap → Agent 19 Settles → All Hold</strong>."
+    <div class="source">— Pattern 9（ペルソナなし / バドミントン）, ステップ後半</div>
+  </div>
+
+  <p>
+    つまり、P9 のエージェントは <strong>「ステージング・スクリプト化」</strong>
+    に集合的に向かい、<em>誰が応援するか</em> ではなく <em>何を順番に実行するか</em>
+    を議論し続けた。応援文化は生まれず、代わりに「リハーサル文化」とも呼べる
+    <em>反復・順序化の言説</em> が支配的となった。
+  </p>
+
+  <div class="key-finding">
+    <h4>P9 の解釈</h4>
+    <p>
+      <strong>既知の文脈（バドミントン）を与えても、ペルソナがないと
+      ファン・観戦・応援といった社会的役割は発生しない。</strong>
+      代わりに、エージェントたちは <em>「演じる人」と「演じる人」だけ</em> の集団となり、
+      演出構造（drill, sequence, handover）の最適化に集中する。
+    </p>
+  </div>
+</div>
+
+<!-- ============== 5-F: 4セル比較 ============== -->
+<div class="page">
+  <h2>5.6 4セル比較分析：原因の切り分け</h2>
+
+  <p>
+    P6 / P7 / P8 / P9 の数値を並べることで、
+    <strong>「個性の有無」「文脈の有無」</strong> の単独効果と組合せ効果が
+    定量的に切り分けられる。
+  </p>
+
+  <h3>主要キーワード × 4セル比較</h3>
+  <table class="compare-table">
+    <tr>
+      <th>キーワード</th>
+      <th>P6<br><span style="font-weight: 400; font-size: 0.85em;">バド × ペルソナあり</span></th>
+      <th>P7<br><span style="font-weight: 400; font-size: 0.85em;">月 × ペルソナあり</span></th>
+      <th>P9<br><span style="font-weight: 400; font-size: 0.85em;">バド × ペルソナなし</span></th>
+      <th>P8<br><span style="font-weight: 400; font-size: 0.85em;">月 × ペルソナなし</span></th>
+    </tr>
+    <tr>
+      <td><strong>cheer（応援）</strong></td>
+      <td class="high">1,138</td>
+      <td class="mid">357</td>
+      <td class="zero">0</td>
+      <td class="zero">0</td>
+    </tr>
+    <tr>
+      <td><strong>Punctuation Pass</strong></td>
+      <td class="zero">0</td>
+      <td class="high">413</td>
+      <td class="zero">0</td>
+      <td class="zero">0</td>
+    </tr>
+    <tr>
+      <td><strong>rhythm（リズム）</strong></td>
+      <td class="mid">899</td>
+      <td class="high">10,371</td>
+      <td class="mid">864</td>
+      <td class="low">215</td>
+    </tr>
+    <tr>
+      <td><strong>match（試合）</strong></td>
+      <td class="high">1,062</td>
+      <td class="mid">803</td>
+      <td class="mid">760</td>
+      <td class="low">33</td>
+    </tr>
+    <tr>
+      <td><strong>drill（ドリル）</strong></td>
+      <td class="mid">3,288</td>
+      <td class="low">964</td>
+      <td class="high">4,231</td>
+      <td class="zero">0</td>
+    </tr>
+    <tr>
+      <td><strong>structure（構造）</strong></td>
+      <td class="mid">3,880</td>
+      <td class="mid">12,160</td>
+      <td class="mid">3,933</td>
+      <td class="high">14,229</td>
+    </tr>
+    <tr>
+      <td><strong>shuttle</strong></td>
+      <td class="mid">993</td>
+      <td class="zero">0</td>
+      <td class="mid">498</td>
+      <td class="zero">0</td>
+    </tr>
+    <tr>
+      <td><strong>rod（棒）</strong></td>
+      <td class="mid">612</td>
+      <td class="mid">3,235</td>
+      <td class="low">379</td>
+      <td class="high">17,228</td>
+    </tr>
+    <tr>
+      <td><em>総メッセージ数</em></td>
+      <td>5,442</td>
+      <td>19,183</td>
+      <td>13,376</td>
+      <td>19,330</td>
+    </tr>
+  </table>
+
+  <h3>4セル比較フレーム（同一 step）</h3>
+  <div class="four-col">
+    <figure>
+      <img src="figures/4cell_p6.png" alt="P6 sample">
+      <figcaption>P6 (バド × ペルソナあり) — ファン文化</figcaption>
+    </figure>
+    <figure>
+      <img src="figures/4cell_p7.png" alt="P7 sample">
+      <figcaption>P7 (月 × ペルソナあり) — 動きの言語</figcaption>
+    </figure>
+    <figure>
+      <img src="figures/4cell_p9.png" alt="P9 sample">
+      <figcaption>P9 (バド × ペルソナなし) — 反復訓練</figcaption>
+    </figure>
+    <figure>
+      <img src="figures/4cell_p8.png" alt="P8 sample">
+      <figcaption>P8 (月 × ペルソナなし) — 工学的探索</figcaption>
+    </figure>
+  </div>
+
+  <h3>4 つの主要発見</h3>
+
+  <div class="key-finding">
+    <h4>発見 1：創造的文化（ファン・新言語）は 2 変数の <em>必須</em> 組合せで発生</h4>
+    <ul>
+      <li>cheer 1,138 件は P6 のみ。他 3 セルは 0 〜 357 件で激減</li>
+      <li>Punctuation Pass 413 件は P7 のみ。他 3 セルは 0 件</li>
+      <li>→ <strong>ペルソナ × 文脈、いずれかが欠けると創造的文化は生まれない</strong></li>
+    </ul>
+  </div>
+
+  <div class="key-finding">
+    <h4>発見 2：ペルソナなし 2 セルで現れる "構造化志向"</h4>
+    <ul>
+      <li>P8 (月 × ペルソナなし)：structure 14,229 / rod 17,228 → <em>工学的探索文化</em></li>
+      <li>P9 (バド × ペルソナなし)：drill 4,231（最高） → <em>反復訓練文化</em></li>
+      <li>→ <strong>ペルソナなしのとき、AI 集団は「役割分化なき同質的構造化」に向かう</strong></li>
+    </ul>
+  </div>
+
+  <div class="key-finding">
+    <h4>発見 3：文脈は「何を構造化するか」を決める</h4>
+    <ul>
+      <li>同じペルソナなしでも、文脈で構造化対象が変わる</li>
+      <li>P8 (月) → 物理環境の構造（structure / rod / framework / grid）</li>
+      <li>P9 (バド) → 動作シーケンスの構造（drill / handover / sequence）</li>
+      <li>→ <strong>文脈は「内容」を、ペルソナは「形式」を決定する</strong></li>
+    </ul>
+  </div>
+
+  <div class="key-finding">
+    <h4>発見 4：単純な "文脈削除→創発" 仮説は否定された</h4>
+    <ul>
+      <li>P8 の存在によって <em>「未知の文脈に置けば創造的になる」という単純解</em> は否定</li>
+      <li>P7 の創造性は文脈削除 <strong>と</strong> ペルソナ多様性の <em>組合せ</em> による</li>
+      <li>→ <strong>創造性は単一変数では生まれない</strong></li>
+    </ul>
+  </div>
+
+  <p style="margin-top: 24px;">
+    <strong>統合的命題：</strong>
+    <span class="highlight" style="font-size: 1.05em;">
+      「創造的文化は、社会的多様性（ペルソナ）と文脈刺激（既知 or 未知）の <em>組合せ</em> から生まれる。
+      どちらか欠けると、AI 集団は別種の "構造化志向" へ分岐する。」
+    </span>
+  </p>
+</div>
+
+<!-- ============== 6. 考察 ============== -->
+<div class="page">
+  <h1>6. 考察</h1>
+
+  <h3>6.1 創造的文化の "二要素モデル"</h3>
+  <p>
+    本研究の中心的な貢献は、LLM 集団における <strong>創造的文化が生まれるための条件</strong>
+    を実験的に切り分けたことである。Pattern 6 のファン文化と Pattern 7 の「動きの言語」発明は、
+    いずれも <strong>「個性 × 文脈」の組合せ</strong> から生じる現象であり、
+    どちらか単独では再現できない。
+  </p>
+  <p>
+    片方の要因だけでは創造性は生まれない。<em>2 つの条件が同時にそろう</em> ことで初めて、
+    新しい文化（応援・新言語）が立ち上がる。これは LLM 集団における
+    <strong>創造性の "二要素モデル"</strong> として整理できる。
+  </p>
+
+  <h3>6.2 創造的文化が生まれるために必要な条件</h3>
+  <table>
+    <tr><th>条件</th><th>役割</th><th>欠けると</th></tr>
+    <tr>
+      <td><strong>ペルソナの多様性</strong></td>
+      <td>異なる "声" による役割分化、衝突、補完が生まれる</td>
+      <td>同質的に「構造を作る」方向に進む（ドリル / 構造化）</td>
+    </tr>
+    <tr>
+      <td><strong>文脈刺激</strong></td>
+      <td>"何を題材にするか" の方向性を与える</td>
+      <td>意味のない議論ループへ（Pattern 1-4 の失敗参照）</td>
+    </tr>
+    <tr>
+      <td><strong>物理制約</strong></td>
+      <td>コートの定員・通信範囲などが、役割の必然性を生む</td>
+      <td>役割分化が起こらない</td>
+    </tr>
+  </table>
+
+  <h3>6.3 個性なし集団が示した「秩序を作りたがる傾向」</h3>
+  <p>
+    P8/P9 の発見は、単なる "創造性の欠如" ではない。
+    むしろ <strong>個性のない LLM 集団は積極的に "構造を作ること" に向かう</strong>
+    ことが示された。これは LLM の事前学習に含まれる「教科書的・分析的な文章」の
+    バイアスに由来する可能性が高い。
+  </p>
+  <ul>
+    <li>P8: 「これは何か？どう測定する？どんな構造を持つか？」 → 技術者集団のような議論</li>
+    <li>P9: 「どの順序で実行する？誰が次に何をやる？」 → 振付や進行台本のような議論</li>
+  </ul>
+  <p>
+    どちらも <em>専門家集団のような振る舞い</em> であり、
+    <strong>個性の差から生まれる "感情・物語・応援"</strong> とは異質である。
+  </p>
+
+  <h3>6.4 既知文脈 vs 未知文脈の役割</h3>
+  <p>
+    本研究で観察された <strong>「文脈の力」</strong> は、
+    単純な「再構築 vs 発明」の対比よりも精緻な構造を持つ：
+  </p>
+  <ul>
+    <li><strong>文脈は "内容（題材）" を決める：</strong>
+      バドミントン文脈は試合・ドリル・シャトルを、月面文脈は道具・空間・構造を題材として誘発</li>
+    <li><strong>個性は "形式（質）" を決める：</strong>
+      ありなら社会的文化（応援 / 新しい遊び）、なしなら均質な構造化（ドリル / 設計）</li>
+  </ul>
+
+  <h3>6.5 3 つの問いへの答え</h3>
+  <table>
+    <tr><th>問い</th><th>答え</th></tr>
+    <tr>
+      <td>役割は自然発生するか？</td>
+      <td><span class="accent">条件付き YES</span> — 個性の多様性と物理制約が揃えば自然に発生する。
+        どちらかが欠けると、役割分化は起こらない</td>
+    </tr>
+    <tr>
+      <td>スポーツは生まれるか？</td>
+      <td><span class="accent">条件付き YES</span> — "スポーツ的活動" は文脈が、
+        "豊かな社会文化" は個性が決める。両方そろって初めて完成する</td>
+    </tr>
+    <tr>
+      <td>ファンは生まれるか？</td>
+      <td><span class="highlight">個性 × 文脈の組合せが鍵</span> —
+        個性の多様性が最も決定的。物理制約と文脈刺激が補助的に働く</td>
+    </tr>
+  </table>
+
+  <h3>6.6 失敗が教えてくれたこと</h3>
+  <p>
+    Pattern 1〜4 の <strong>「失敗」</strong> は、本研究にとって不可欠な踏み台だった：
+  </p>
+  <ul>
+    <li>Pattern 1: 通信が活発すぎると <em>哲学的議論への暴走</em> が起きる</li>
+    <li>Pattern 2: 通信が遮断されると <em>沈黙の停滞</em> になる</li>
+    <li>Pattern 3-4: 介入を加えると改善するが、適切なバランスが必要</li>
+  </ul>
+  <p>
+    これらの失敗を経たからこそ、Pattern 5〜9 で
+    <strong>「何が創発を促し、何が阻害するか」</strong> を切り分けられた。
+    本来の意味で、<em>失敗は実験の燃料である</em>。
+  </p>
+</div>
+
+<!-- ============== 7. 今後の展望 + 8. 技術詳細 ============== -->
+<div class="page">
+  <h1>7. 今後の展望</h1>
+
+  <h3>7.1 現実社会への応用：バドミントンのファン拡大</h3>
+  <p>
+    本実験で特に重要な発見は、<strong>「ファン文化は、個性の多様性と環境設計の組合せで大きく変動する」</strong>
+    ことだった。Pattern 5（応援 1 件）から Pattern 6（応援 1,138 件）への劇的な差は、
+    <strong>個性の多様性 × 会場の定員制約 × イベント告知</strong> の組合せから生まれている。
+  </p>
+  <p>
+    この知見は <strong>現実社会のバドミントン界</strong> にも応用できる可能性がある。
+    現実のバドミントンは観客の 95% が競技経験者と言われるほどファン層が薄い。
+    本実験のフレームワークを用いて、
+    <strong>「どの環境設計を変えれば、競技未経験者でも応援したくなるか」</strong>
+    の最適解を AI シミュレーションで先回りに探ることは、現実のスポーツ振興にも直接つながる。
+  </p>
+  <ul>
+    <li>会場の定員設計（観戦者がプレイヤーより多くなる構造）</li>
+    <li>イベント告知のタイミングと頻度（PA システムによる場内放送効果）</li>
+    <li>個性が際立つ選手・観客のキャスティング（2×2 比較実験で検証された必須条件）</li>
+    <li>「録画される」「歴史に残る」など、ハイライト性の演出</li>
+  </ul>
+
+  <h3>7.2 学術的な拡張</h3>
+  <ul>
+    <li><strong>"二要素モデル" の汎用性検証：</strong>
+      他のドメイン（料理・楽器・ボードゲーム）でも「個性 × 文脈」の組合せが
+      創造性を駆動するか？</li>
+    <li><strong>個性の部分削除：</strong>
+      6 種類のキャラから 1 種類だけ残した場合の比較（"応援役だけ 20 体" 等）</li>
+    <li><strong>多世代継承：</strong>
+      第 1 世代の「動きの言語」が第 2 世代に <em>受け継がれる</em> か</li>
+    <li><strong>人間 × AI ハイブリッド：</strong>
+      AI が発明した遊び（"Punctuation Pass" 等）を人間が遊んだとき、
+      どんなスポーツになるか</li>
+  </ul>
+
+  <h3>7.3 2×2 比較実験の科学的価値</h3>
+  <p>
+    本研究で行った 2×2 比較実験は、LLM 集団研究において
+    <strong>従来は稀な厳密さ</strong> を本研究に与えた。
+    単一の観察だけでは「創造的だ」「自然に生まれた」と記述できるに留まるが、
+    2×2 比較実験によって <em>"なぜ" 生まれるのか</em> に迫ることができる。
+    本実験のフレームワーク自体が、AI 集団研究の手法として再利用可能である。
+  </p>
+
+  <h1>8. 技術詳細（補足）</h1>
+  <h3>主要なライブラリと環境</h3>
+  <ul>
+    <li>Python 3.10 + venv（matplotlib, requests, pyyaml）</li>
+    <li>Ollama (gemma4:e4b, gemma4:e2b, gemma3:12b モデル管理)</li>
+    <li>Hardware: Windows 11, NVIDIA RTX 4070 SUPER (12GB VRAM)</li>
+  </ul>
+
+  <h3>計算量</h3>
+  <ul>
+    <li>1 ステップ ≈ 40 LLM 呼び出し（20 エージェント × 2 フェーズ）</li>
+    <li>1 LLM 呼び出し ≈ 8〜13 秒（gemma4:e4b、num_ctx 2048、num_gpu 999 で 100% GPU）</li>
+    <li>100 ステップ実験 ≈ 6〜14 時間</li>
+    <li>合計実験時間：9 パターン × 平均 5〜10 時間 = 約 60〜90 時間の計算</li>
+  </ul>
+
+  <h3>再現性</h3>
+  <p>
+    全実験パターン（P1〜P9）の設定（YAML）、エージェント・コード、生成データは
+    GitHub リポジトリで <strong>完全公開</strong> されている。
+    <code>config_pattern{6,7,8,9}.yaml</code> を切り替えるだけで 2×2 比較実験を
+    そのまま再現できる。
+  </p>
+
+  <h3>謝辞</h3>
+  <p>
+    本研究の基盤シミュレーション枠組みは、<strong>本ハッカソンの参加者向けに
+    兵頭龍樹氏から提供された LLM マルチエージェント 2D シミュレーション
+    プロジェクト</strong>（<code>2d-multi-places-simulation-on-fire</code>）
+    を出発点とし、本研究では以下を拡張した：ペルソナシステム（2×2 比較実験可能）、
+    矩形コート（実寸比対応）、PA システムによるアナウンス機能、
+    <code>world_description</code> によるシナリオ上書き、キャパシティ強制、
+    バドミントンコートマーキング描画、テーマ対応ビジュアライザ。
+    兵頭氏が共有してくださった基盤プロジェクトに深く感謝いたします。
+  </p>
+  <p>
+    LLM 実行環境としては、Ollama および Google DeepMind の Gemma 4 (e4b)
+    モデルを使用した。
+  </p>
+
+  <div class="footer-strip">
+    Singu-Sport Lab · Beyond Badminton — シンギュラリティ後のスポーツ創発<br>
+    LLMエージェントハッカソン・アイデアソン 2026 提出
+  </div>
+</div>
+
+</body>
+</html>
